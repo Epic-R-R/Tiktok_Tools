@@ -1,31 +1,70 @@
-import requests
-from bs4 import BeautifulSoup
+from PyInquirer import prompt
+from terminal_style import style
+from validators import EmptyValidator
+from pyfiglet import Figlet
+import user
+from dotenv import load_dotenv
 import os
+import sys
 
+def main() -> None:
+    load_dotenv()
+    print(Figlet(font=os.getenv('FigletFont')).renderText('TikTok Tools'))
+    menu = [
+        {
+            "type": "list",
+            "name": "menu",
+            "message": "Choose the option: ",
+            "choices": [
+                "Download Profile Picture",
+                "Download Video",
+                "Show all video liked by user",
+                "Exit"
+            ]
+        }
+    ]
+    ans = prompt(menu, style=style)
+    if ans['menu'] == "Download Profile Picture":
+        get_username = [
+            {
+                "type": "input",
+                "name": "username",
+                "message": "Enter username: ",
+                "validate": EmptyValidator
+            }
+        ]
+        answer = prompt(get_username, style=style)
+        user.profile_picture_user(username=answer['username'])
 
-
-def get_content(url: str, payload: dict) -> bytes:
-    response = requests.post(url=url, data=payload)
-    if response.status_code == 200:
-        return response.content
+    elif ans['menu'] == "Download Video":
+        get_username = [
+            {
+                "type": "input",
+                "name": "username",
+                "message": "Enter username: ",
+                "validate": EmptyValidator
+            }
+        ]
+        answer = prompt(get_username, style=style)
+        user.video_from_user(username=answer['username'])
+    elif ans['menu'] == "Show all video liked by user":
+        pass
+    elif ans['menu'] == "Exit":
+        exit_confirm = [
+            {
+                "type": "confirm",
+                "message": "Do you want to exit?",
+                "name": "exit",
+                "defult": False
+            }
+        ]
+        answer = prompt(exit_confirm, style=style)
+        if answer['exit']:
+            sys.exit(0)
+        else:
+            main()
     else:
-        return 0
-
-def download_img(username: str, content: bytes) -> None:
-    soup = BeautifulSoup(content, 'html.parser')
-    img = soup.findAll('img')[-1]['src']
-    if os.path.basename(img) == "share_img.png":
-        username = f"{username}_not_found"
-    response = requests.get(img, stream=True)
-    with open(f"{username}.jpg", 'wb') as fr:
-        for chunk in response.iter_content(chunk_size=128):
-            fr.write(chunk)
-
+        print("Bad choose!.")
+        main()
 if __name__ == "__main__":
-    url = "https://www.howtotechies.com/pinterest-video-downloader"
-    username = input("Enter username: ")
-    payload = {"video-url": username}
-    if get_content(url=url, payload=payload) == 0:
-        print("Bad requests, Try again later.")
-    else:
-        download_img(username=username, content=get_content(url=url, payload=payload))
+    main()
