@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from os.path import basename
 from dotenv import load_dotenv
 import os
+import sys
 
 
 def get_content(url: str, payload: dict) -> bytes:
@@ -30,11 +31,12 @@ def profile_picture_user(username: str) -> None:
             else:
                 download_data = 0
                 total_size = int(total_size)
-                for file_data in response.iter_content(chunk_size=128):
+                for file_data in response.iter_content(chunk_size=4096):
                     download_data += len(file_data)
                     fr.write(file_data)
-                    portion = int(100 * download_data / total_size)
-                    print(f"[{'#' * portion}] {portion}%")
+                    done = int(50 * download_data / total_size)
+                    sys.stdout.write(f"\rDownloading[{'=' * done}{' ' * (50-done)}] {done+50}" )    
+                    sys.stdout.flush()
     else:
         print("Bad request, try again later!.")
 

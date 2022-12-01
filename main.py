@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 import sys
 
+
 def main() -> None:
     load_dotenv()
     print(Figlet(font=os.getenv('FigletFont')).renderText('TikTok Tools'))
@@ -66,5 +67,8 @@ def main() -> None:
     else:
         print("Bad choose!.")
         main()
+
+
 if __name__ == "__main__":
     main()
+
