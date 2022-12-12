@@ -1,0 +1,9 @@
+{
+    "manifest_version": 3,
+    "version": "1.0",
+    "name": "Tiktok Profile Downloader",
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": "./images/icon-100.png"
+    }
+}
