@@ -1,21 +1,23 @@
 const downloadBtnEl = document.getElementsByClassName("btn");
-const inputEl = document.getElementsByClassName("form__field");
+const inputEl = document.getElementById("name");
 
 downloadBtnEl[0].addEventListener("click", function () {
-  let imgSrc = "";
+  console.log(inputEl.value);
+  const imgs = [];
   $(document).ready(function () {
     $.post(
       "https://www.howtotechies.com/pinterest-video-downloader",
       {
         "video-url": inputEl.value,
       },
-      function (data) {
+      function (data, status) {
+        console.log(status);
         $(data)
           .find("img")
           .each(function () {
-            imgSrc = $(this).attr("src");
+            imgs.push($(this).attr("src"));
           });
-        console.log(imgSrc);
+        window.open(imgs[1]);
       }
     );
   });
