@@ -5,5 +5,6 @@
     "action": {
         "default_popup": "index.html",
         "default_icon": "./images/icon-100.png"
-    }
+    },
+    "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
 }
